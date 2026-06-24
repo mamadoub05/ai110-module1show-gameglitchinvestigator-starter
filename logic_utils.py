@@ -12,7 +12,7 @@ def parse_guess(raw: str):
     raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
 
 
-# FIX: Refactored from app.py into logic_utils.py and corrected swapped hint messages using AI agent mode.
+# FIX: Refactored from app.py into logic_utils.py and corrected swapped hint messages.
 def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"

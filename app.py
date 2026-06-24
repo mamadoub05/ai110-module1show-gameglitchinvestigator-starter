@@ -1,6 +1,6 @@
 import random
 import streamlit as st
-# FIX: Moved check_guess to logic_utils.py for cleaner separation. Refactored with AI agent mode.
+# FIX: Moved check_guess to logic_utils.py for cleaner separation. Refactored with AI agent
 from logic_utils import check_guess
 
 def get_range_for_difficulty(difficulty: str):
@@ -9,7 +9,7 @@ def get_range_for_difficulty(difficulty: str):
     if difficulty == "Normal":
         return 1, 100
     if difficulty == "Hard":
-        # FIX: Range was 1-50, easier than Normal's 1-100. Fixed via AI agent debugging.
+        # FIX: Range was 1-50, easier than Normal's 1-100. Fixed via AI agent.
         return 1, 200
     return 1, 100
 
@@ -123,7 +123,7 @@ if new_game:
     st.session_state.attempts = 0
     # FIX: Was hardcoded to randint(1, 100), ignoring difficulty. Now uses correct range. Fixed with AI agent.
     st.session_state.secret = random.randint(low, high)
-    # FIX: Was not resetting status and history on new game. Added with AI agent debugging.
+    # FIX: Was not resetting status and history on new game. Added with AI agent.
     st.session_state.status = "playing"
     st.session_state.history = []
     st.success("New game started.")
