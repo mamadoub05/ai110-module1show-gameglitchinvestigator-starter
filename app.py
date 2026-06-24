@@ -1,5 +1,7 @@
 import random
 import streamlit as st
+# FIX: Moved check_guess to logic_utils.py for cleaner separation. Refactored with AI agent mode.
+from logic_utils import check_guess
 
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
@@ -7,7 +9,8 @@ def get_range_for_difficulty(difficulty: str):
     if difficulty == "Normal":
         return 1, 100
     if difficulty == "Hard":
-        return 1, 50
+        # FIX: Range was 1-50, easier than Normal's 1-100. Fixed via AI agent debugging.
+        return 1, 200
     return 1, 100
 
 
@@ -29,34 +32,17 @@ def parse_guess(raw: str):
     return True, value, None
 
 
-def check_guess(guess, secret):
-    if guess == secret:
-        return "Win", "🎉 Correct!"
-
-    try:
-        if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
-        else:
-            return "Too Low", "📉 Go LOWER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
-
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
     if outcome == "Win":
-        points = 100 - 10 * (attempt_number + 1)
+        # FIX: Removed extra +1 that double-counted attempts. Identified with AI agent.
+        points = 100 - 10 * attempt_number
         if points < 10:
             points = 10
         return current_score + points
 
     if outcome == "Too High":
-        if attempt_number % 2 == 0:
-            return current_score + 5
+        # FIX: Was randomly adding +5 on even attempts. Fixed to always subtract.
         return current_score - 5
 
     if outcome == "Too Low":
@@ -93,7 +79,8 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    # FIX: Was starting at 1, inflating attempt count. Corrected to 0 using AI agent debugging.
+    st.session_state.attempts = 0
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -132,8 +119,13 @@ with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
+    # FIX: Was resetting to 1 instead of 0, same off-by-one bug. Fixed with AI agent.
     st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    # FIX: Was hardcoded to randint(1, 100), ignoring difficulty. Now uses correct range. Fixed with AI agent.
+    st.session_state.secret = random.randint(low, high)
+    # FIX: Was not resetting status and history on new game. Added with AI agent debugging.
+    st.session_state.status = "playing"
+    st.session_state.history = []
     st.success("New game started.")
     st.rerun()
 
@@ -155,10 +147,8 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        if st.session_state.attempts % 2 == 0:
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
+        # FIX: Was casting secret to string on even attempts, breaking comparisons. Fixed with AI agent.
+        secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)
 

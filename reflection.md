@@ -8,15 +8,19 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
 
+  The hints aren't working
+  The number of attempts isn't changing
+  The the new game button wasn't working
+
 **Bug Reproduction Log**
 
 Document at least 3 bugs you found. Add rows as needed.
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
 |-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+Guessof5| "go higher" hint.  "go lower"         "none"
+Guessof95 "go lower" hint.   "go higher".       "none"
+showhintbutton| it will show the hint| nothing happens| none
 
 ---
 
